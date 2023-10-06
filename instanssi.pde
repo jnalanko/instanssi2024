@@ -1,4 +1,4 @@
-final int COUNT = 150;
+final int COUNT = 300;
 
 float[] pt;
 int[] style;
@@ -18,10 +18,14 @@ void setup() {
     pt[index++] = 0; // y rot
     pt[index++] = random(TAU); // z rot
 
-    pt[index++] = 90; // Short to quarter-circle arcs
-    pt[index++] = 100; // Radius. Space them out nicely
-    pt[index++] = 15; // Width of band
-    pt[index++] = random(1); // Speed of rotation
+    pt[index++] = 45 + random(45); // length in degrees
+    pt[index++] = 90 + random(20); // Radius. Space them out nicely
+    pt[index++] = 10; // Width of band
+    
+    float speed = random(4)-2;
+    if(random(100) > 90) speed += 5;
+    pt[index++] = speed; // Speed of rotation
+     
 
     style[i*2] = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
     style[i*2+1] = 0; // style
@@ -32,19 +36,19 @@ void draw() {
   background(0);
 
   float t = millis() / 1000.0; // Current time in seconds
-  translate(width/2, height/2, 500 + 100*t); // Zoom forward 100 units / second
+  translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
 
   int index = 0;
   for (int i = 0; i < COUNT; i++) {
     // Drawing arc i
     
     pushMatrix();
-    translate(0,0, -i * 10); // Arc i is 10 * i units away from the camera
+    translate(0,0, -i * 5);
     index += 2; // xrot and yrot unused
     rotateZ(pt[index++]); // zrot
 
     fill(style[i*2]);
-    noStroke();
+    //noStroke();
     arc(0, 0, pt[index++], pt[index++], pt[index++]);
 
     // increase z rotation angle
