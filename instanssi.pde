@@ -1,4 +1,5 @@
-final int COUNT = 1000;
+final int COUNT = 300;
+final float PULSE_TIME = 2;
 
 Arc arcs[];
 
@@ -8,7 +9,7 @@ class Arc{
    float radius;
    float width;
    float speed;
-   color rgb;
+   color rgba;
 }
 
 void setup() {
@@ -36,8 +37,12 @@ void setup() {
     arcs[i].speed = random(4)-2;
     if(random(100) > 90) arcs[i].speed += 5;
     
-    arcs[i].rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210);
+    arcs[i].rgba = colorBlended(random(1), 200,255,0, 50,120,0, 210);
   }
+}
+
+float floatmod(float t, float m){
+   return t - ((int)(t/m))*m; 
 }
 
 void draw() {
@@ -45,6 +50,9 @@ void draw() {
 
   float t = millis() / 1000.0; // Current time in seconds
   translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
+  
+  int pulse_index = (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
+  int PULSE_WIDTH = 20;
 
   for (int i = 0; i < COUNT; i++) {
     
@@ -53,8 +61,15 @@ void draw() {
     pushMatrix();
     translate(0,0, -i * 5);
     rotateZ(arcs[i].zrot);
-    fill(arcs[i].rgb);
+    
+    color rgba = arcs[i].rgba;
+    if (abs(i - pulse_index) <= (PULSE_WIDTH/2)){
+      float d = 1 - (float)abs(i - pulse_index) / (PULSE_WIDTH / 2);
+      rgba = colorBlended(d, red(rgba), green(rgba), blue(rgba), 255, 255, 255, 255);
+    }
+    fill(rgba);
     noStroke();
+    
     arc(0, 0, arcs[i].degrees, arcs[i].radius, arcs[i].width);
 
     // increase z rotation angle
