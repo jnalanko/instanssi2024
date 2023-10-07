@@ -122,7 +122,7 @@ void draw() {
   // Draw lightning bolt
   
   float b = floatmod(t,3);
-  float brightness = min(gaussian(1.5, 0.3, b), 1);
+  float brightness = min(gaussian(1.5, 0.1, b), 1);
   randomSeed((int)(t*5));
   subdivide_bolt(0,-600,-1000, 0, 200, -1000, 4, random(0.25, 0.75), brightness);
   //float x = keski.x;
@@ -136,6 +136,8 @@ void draw() {
   //draw_bolt(0,-100,-1000, x,y,z);
   //draw_bolt(x,y,z, 0, 100, -1000);
   //draw_bolt(0,-100,-500, 0, 100, -500);
+  
+  saveFrame("frames/####.tif");
 }
 
 
