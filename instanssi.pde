@@ -42,44 +42,49 @@ float floatmod(float t, float m){
    return t - ((int)(t/m))*m; 
 }
 
-void draw_bolt(float x1, float y1, float z1, float x2, float y2, float z2){
+void draw_bolt(float x1, float y1, float z1, float x2, float y2, float z2, float brightness){
   //pushMatrix();
   //translate(0,0,-depth);
-  stroke(255,255,255,96);
+  stroke(255,255,255,255 * brightness);
   
   strokeWeight(1);
   line(x1, y1, z1, x2, y2, z2);
 
-  strokeWeight(2);
-  line(x1, y1, z1, x2, y2, z2);
-  
   strokeWeight(3);
   line(x1, y1, z1, x2, y2, z2);
   
-  strokeWeight(4);
+  strokeWeight(6);
+  line(x1, y1, z1, x2, y2, z2);
+  
+  strokeWeight(9);
   line(x1, y1, z1, x2, y2, z2);
   
   
   //popMatrix();  
 }
 
-void subdivide_bolt(float x1, float y1, float z1, float x2, float y2, float z2, int depth){
+void subdivide_bolt(float x1, float y1, float z1, float x2, float y2, float z2, int depth, float p, float brightness){
   
    if(depth == 0){
-       draw_bolt(x1, y1, z1, x2, y2, z2);
+       draw_bolt(x1, y1, z1, x2, y2, z2, brightness);
        return;
    }
   
-   float p = random(1);
    PVector salama = new PVector(x2-x1, y2-y1, z2-z1);
    PVector q = new PVector(x1,y1,z1);
    
    PVector keski = q.add(salama.mult(p));
    
-   keski.x += random(50);
+   keski.x += random(25);
    
-   subdivide_bolt(x1, y1, z1, keski.x, keski.y, keski.z, depth-1);
-   subdivide_bolt(keski.x, keski.y, keski.z, x2, y2, z2, depth-1);
+   subdivide_bolt(x1, y1, z1, keski.x, keski.y, keski.z, depth-1, random(0.25, 0.75), brightness);
+   subdivide_bolt(keski.x, keski.y, keski.z, x2, y2, z2, depth-1, random(0.25, 0.75), brightness);
+}
+
+//final float PI = 3.14159265359;
+
+float gaussian(float mu, float sigma, float x){
+     return 1.0 / (sigma * sqrt(2*PI)) * exp(-0.5 * pow((x - mu) / sigma, 2));
 }
 
 void draw() {
@@ -90,7 +95,6 @@ void draw() {
   
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
   int PULSE_WIDTH = 30;
-
 
   for (int i = 0; i < COUNT; i++) {
     // Drawing arc i
@@ -117,7 +121,10 @@ void draw() {
 
   // Draw lightning bolt
   
-  subdivide_bolt(0,-100,-1000, 0, 100, -1000, 4);
+  float b = floatmod(t,3);
+  float brightness = min(gaussian(1.5, 0.3, b), 1);
+  randomSeed((int)(t*5));
+  subdivide_bolt(0,-600,-1000, 0, 200, -1000, 4, random(0.25, 0.75), brightness);
   //float x = keski.x;
   //float y = keski.y;
   //float z = keski.z;
