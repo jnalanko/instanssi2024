@@ -1,4 +1,4 @@
-final int COUNT = 300;
+final int COUNT = 1000;
 
 float[] pt;
 int[] style;
@@ -33,7 +33,7 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(0,0,32);
 
   float t = millis() / 1000.0; // Current time in seconds
   translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
@@ -48,7 +48,7 @@ void draw() {
     rotateZ(pt[index++]); // zrot
 
     fill(style[i*2]);
-    //noStroke();
+    noStroke();
     arc(0, 0, pt[index++], pt[index++], pt[index++]);
 
     // increase z rotation angle
