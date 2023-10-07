@@ -4,13 +4,11 @@ Arc arcs[];
 
 class Arc{
    float xrot, yrot, zrot;
-   float len; // Degrees
+   float degrees;
    float radius;
    float width;
    float speed;
    color rgb;
-   
-   //public Arc(float xrot, float yrot, float zrot
 }
 
 void setup() {
@@ -19,7 +17,6 @@ void setup() {
   randomSeed(100);  // use this to get the same result each time
 
   arcs = new Arc[COUNT];
-  //ArrayList<Arc> arcs = new ArrayList<Arc>();
 
   // Set up arc shapes
   for (int i = 0; i < COUNT; i++) {
@@ -32,13 +29,14 @@ void setup() {
     arcs[i].yrot = 0;
     arcs[i].zrot = random(TAU);
 
-    arcs[i].len =  45 + random(45); // length in degrees
-    arcs[i].radius = 90 + random(20); // Radius. Space them out nicely
-    arcs[i].width = 10; // Width of band
+    arcs[i].degrees =  45 + random(45); // length in degrees
+    arcs[i].radius = 90 + random(20);
+    arcs[i].width = 10; // width of band
     
     arcs[i].speed = random(4)-2;
     if(random(100) > 90) arcs[i].speed += 5;
-    arcs[i].rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
+    
+    arcs[i].rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210);
   }
 }
 
@@ -54,10 +52,10 @@ void draw() {
     
     pushMatrix();
     translate(0,0, -i * 5);
-    rotateZ(arcs[i].zrot); // zrot
+    rotateZ(arcs[i].zrot);
     fill(arcs[i].rgb);
     noStroke();
-    arc(0, 0, arcs[i].len, arcs[i].radius, arcs[i].width);
+    arc(0, 0, arcs[i].degrees, arcs[i].radius, arcs[i].width);
 
     // increase z rotation angle
     arcs[i].zrot += arcs[i].speed / 50;
