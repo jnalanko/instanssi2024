@@ -28,27 +28,17 @@ void setup() {
     
     System.out.println(i);
 
-    float xrot = 0;
-    float yrot = 0;
-    float zrot = random(TAU);
+    arcs[i].xrot = 0;
+    arcs[i].yrot = 0;
+    arcs[i].zrot = random(TAU);
 
-    float len =  45 + random(45); // length in degrees
-    float radius = 90 + random(20); // Radius. Space them out nicely
-    float width = 10; // Width of band
+    arcs[i].len =  45 + random(45); // length in degrees
+    arcs[i].radius = 90 + random(20); // Radius. Space them out nicely
+    arcs[i].width = 10; // Width of band
     
-    float speed = random(4)-2;
-    if(random(100) > 90) speed += 5;
-    color rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
-
-    arcs[i].xrot = xrot;
-    arcs[i].yrot = yrot;
-    arcs[i].zrot = zrot;
-    arcs[i].len = len;
-    arcs[i].radius = radius;
-    arcs[i].width = width;
-    arcs[i].speed = speed;
-    arcs[i].rgb = rgb;
-
+    arcs[i].speed = random(4)-2;
+    if(random(100) > 90) arcs[i].speed += 5;
+    arcs[i].rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
   }
 }
 
