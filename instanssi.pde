@@ -137,7 +137,7 @@ void draw() {
   //draw_bolt(x,y,z, 0, 100, -1000);
   //draw_bolt(0,-100,-500, 0, 100, -500);
   
-  saveFrame("frames/####.tif");
+  //saveFrame("frames/####.tif");
 }
 
 
