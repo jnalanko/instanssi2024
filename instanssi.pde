@@ -13,7 +13,7 @@ class Arc{
 }
 
 void setup() {
-  size(1024, 768, P3D);
+  size(1920/2, 1080/2, P3D);
   background(255);
   randomSeed(100);  // use this to get the same result each time
 
@@ -51,8 +51,8 @@ void draw() {
   float t = millis() / 1000.0; // Current time in seconds
   translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
   
-  int pulse_index = (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
-  int PULSE_WIDTH = 20;
+  int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
+  int PULSE_WIDTH = 30;
 
   for (int i = 0; i < COUNT; i++) {
     
