@@ -23,9 +23,6 @@ void setup() {
   for (int i = 0; i < COUNT; i++) {
     
     arcs[i] = new Arc();
-    
-    System.out.println(i);
-
     arcs[i].xrot = 0;
     arcs[i].yrot = 0;
     arcs[i].zrot = random(TAU);
@@ -45,6 +42,22 @@ float floatmod(float t, float m){
    return t - ((int)(t/m))*m; 
 }
 
+void draw_bolt(float x1, float y1, float z1, float x2, float y2, float z2){
+  //pushMatrix();
+  //translate(0,0,-depth);
+  stroke(255,255,255);
+  //filter( BLUR, 6 );
+  //fill(255, 255, 255, 96);
+
+  line(x1, y1, z1, x2, y2, z2); 
+  //rect(-2,-1000,4,10000);
+  //rect(-5,-1000,10,10000);
+  //rect(-10,-1000,20,10000);
+  //rect(-15,-1000,30,10000);
+  
+  //popMatrix();  
+}
+
 void draw() {
   background(0,0,32);
 
@@ -54,8 +67,8 @@ void draw() {
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
   int PULSE_WIDTH = 30;
 
+
   for (int i = 0; i < COUNT; i++) {
-    
     // Drawing arc i
     
     pushMatrix();
@@ -77,6 +90,9 @@ void draw() {
 
     popMatrix();
   }
+
+  // Draw lightning bolt
+  draw_bolt(0,-1000,-1000, 0, 1000, -1000);
 }
 
 
