@@ -45,17 +45,41 @@ float floatmod(float t, float m){
 void draw_bolt(float x1, float y1, float z1, float x2, float y2, float z2){
   //pushMatrix();
   //translate(0,0,-depth);
-  stroke(255,255,255);
-  //filter( BLUR, 6 );
-  //fill(255, 255, 255, 96);
+  stroke(255,255,255,96);
+  
+  strokeWeight(1);
+  line(x1, y1, z1, x2, y2, z2);
 
-  line(x1, y1, z1, x2, y2, z2); 
-  //rect(-2,-1000,4,10000);
-  //rect(-5,-1000,10,10000);
-  //rect(-10,-1000,20,10000);
-  //rect(-15,-1000,30,10000);
+  strokeWeight(2);
+  line(x1, y1, z1, x2, y2, z2);
+  
+  strokeWeight(3);
+  line(x1, y1, z1, x2, y2, z2);
+  
+  strokeWeight(4);
+  line(x1, y1, z1, x2, y2, z2);
+  
   
   //popMatrix();  
+}
+
+void subdivide_bolt(float x1, float y1, float z1, float x2, float y2, float z2, int depth){
+  
+   if(depth == 0){
+       draw_bolt(x1, y1, z1, x2, y2, z2);
+       return;
+   }
+  
+   float p = random(1);
+   PVector salama = new PVector(x2-x1, y2-y1, z2-z1);
+   PVector q = new PVector(x1,y1,z1);
+   
+   PVector keski = q.add(salama.mult(p));
+   
+   keski.x += random(50);
+   
+   subdivide_bolt(x1, y1, z1, keski.x, keski.y, keski.z, depth-1);
+   subdivide_bolt(keski.x, keski.y, keski.z, x2, y2, z2, depth-1);
 }
 
 void draw() {
@@ -92,7 +116,19 @@ void draw() {
   }
 
   // Draw lightning bolt
-  draw_bolt(0,-1000,-1000, 0, 1000, -1000);
+  
+  subdivide_bolt(0,-100,-1000, 0, 100, -1000, 4);
+  //float x = keski.x;
+  //float y = keski.y;
+  //float z = keski.z;
+  //beginShape(LINES);
+  //vertex(0,-100,-1000);
+  //vertex(x,y,z);
+  //vertex(0, 100, -1000);
+  //endShape();
+  //draw_bolt(0,-100,-1000, x,y,z);
+  //draw_bolt(x,y,z, 0, 100, -1000);
+  //draw_bolt(0,-100,-500, 0, 100, -500);
 }
 
 
