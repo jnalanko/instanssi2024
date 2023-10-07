@@ -1,34 +1,54 @@
 final int COUNT = 1000;
 
-float[] pt;
-int[] style;
+Arc arcs[];
+
+class Arc{
+   float xrot, yrot, zrot;
+   float len; // Degrees
+   float radius;
+   float width;
+   float speed;
+   color rgb;
+   
+   //public Arc(float xrot, float yrot, float zrot
+}
 
 void setup() {
   size(1024, 768, P3D);
   background(255);
   randomSeed(100);  // use this to get the same result each time
 
-  pt = new float[7 * COUNT]; // rotx, roty, rotz, deg, rad, w, speed
-  style = new int[2 * COUNT]; // color, render style
+  arcs = new Arc[COUNT];
+  //ArrayList<Arc> arcs = new ArrayList<Arc>();
 
   // Set up arc shapes
-  int index = 0;
   for (int i = 0; i < COUNT; i++) {
-    pt[index++] = 0; // x rot
-    pt[index++] = 0; // y rot
-    pt[index++] = random(TAU); // z rot
+    
+    arcs[i] = new Arc();
+    
+    System.out.println(i);
 
-    pt[index++] = 45 + random(45); // length in degrees
-    pt[index++] = 90 + random(20); // Radius. Space them out nicely
-    pt[index++] = 10; // Width of band
+    float xrot = 0;
+    float yrot = 0;
+    float zrot = random(TAU);
+
+    float len =  45 + random(45); // length in degrees
+    float radius = 90 + random(20); // Radius. Space them out nicely
+    float width = 10; // Width of band
     
     float speed = random(4)-2;
     if(random(100) > 90) speed += 5;
-    pt[index++] = speed; // Speed of rotation
-     
+    color rgb = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
 
-    style[i*2] = colorBlended(random(1), 200,255,0, 50,120,0, 210); // color
-    style[i*2+1] = 0; // style
+    arcs[i].xrot = xrot;
+    arcs[i].yrot = yrot;
+    arcs[i].zrot = zrot;
+    arcs[i].len = len;
+    arcs[i].radius = radius;
+    arcs[i].width = width;
+    arcs[i].speed = speed;
+    arcs[i].rgb = rgb;
+
   }
 }
 
@@ -38,23 +58,20 @@ void draw() {
   float t = millis() / 1000.0; // Current time in seconds
   translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
 
-  int index = 0;
   for (int i = 0; i < COUNT; i++) {
+    
     // Drawing arc i
     
     pushMatrix();
     translate(0,0, -i * 5);
-    index += 2; // xrot and yrot unused
-    rotateZ(pt[index++]); // zrot
-
-    fill(style[i*2]);
+    rotateZ(arcs[i].zrot); // zrot
+    fill(arcs[i].rgb);
     noStroke();
-    arc(0, 0, pt[index++], pt[index++], pt[index++]);
+    arc(0, 0, arcs[i].len, arcs[i].radius, arcs[i].width);
 
     // increase z rotation angle
-    pt[index-4] += pt[index] / 50;
-    index++;
-    
+    arcs[i].zrot += arcs[i].speed / 50;
+
     popMatrix();
   }
 }
