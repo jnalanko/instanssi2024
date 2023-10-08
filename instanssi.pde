@@ -108,7 +108,7 @@ void draw() {
   float brightness3 = min(gaussian(1.0, 0.1, b), 1);
   float flash = min(64, (brightness1 + brightness2 + brightness3) * 32);
   //flash = 0;
-  background(flash,flash,32+flash);
+  background(flash,flash,flash);
 
   randomSeed((int)(t/3));
   random(1); // Draw one random value. If we don't do this, then the first value generated is not very random
