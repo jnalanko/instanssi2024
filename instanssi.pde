@@ -87,6 +87,8 @@ float gaussian(float mu, float sigma, float x){
      return 1.0 / (sigma * sqrt(2*PI)) * exp(-0.5 * pow((x - mu) / sigma, 2));
 }
 
+// Idea: kaaret lähtee menemään samaan suuntaan ja kiihtyy
+
 void draw() {
   background(0,0,32);
 
@@ -122,9 +124,22 @@ void draw() {
   // Draw lightning bolt
   
   float b = floatmod(t,3);
-  float brightness = min(gaussian(1.5, 0.1, b), 1);
+  float brightness1 = min(gaussian(1.5, 0.1, b), 1);
+  float brightness2 = min(gaussian(2.5, 0.1, b), 1);
+  float brightness3 = min(gaussian(1.0, 0.1, b), 1);
+
+  randomSeed((int)(t/3));
+  random(1); // If we don't do this, then the first value generated is not very random
+  float x1 = random(-400, 400);
+  float x2 = random(-400, 400);
+  float x3 = random(-400, 400);
+
   randomSeed((int)(t*5));
-  subdivide_bolt(0,-600,-1000, 0, 200, -1000, 4, random(0.25, 0.75), brightness);
+  subdivide_bolt(x1,-600,-2000, x1, 200, -2000, 4, random(0.25, 0.75), brightness1);
+  subdivide_bolt(x2,-600,-1000, x2, 200, -1000, 4, random(0.25, 0.75), brightness2);
+  subdivide_bolt(x3,-600,-2000, x3, 200, -2000, 4, random(0.25, 0.75), brightness3);
+  
+  
   //float x = keski.x;
   //float y = keski.y;
   //float z = keski.z;
