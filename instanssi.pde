@@ -90,9 +90,30 @@ float gaussian(float mu, float sigma, float x){
 // Idea: kaaret lähtee menemään samaan suuntaan ja kiihtyy
 
 void draw() {
-  background(0,0,32);
 
   float t = millis() / 1000.0; // Current time in seconds
+  
+
+  // Draw lightning bolt
+  
+  float b = floatmod(t,3);
+  float brightness1 = min(gaussian(1.5, 0.1, b), 1);
+  float brightness2 = min(gaussian(2.5, 0.1, b), 1);
+  float brightness3 = min(gaussian(1.0, 0.1, b), 1);
+  float flash = min(64, (brightness1 + brightness2 + brightness3) * 32);
+  background(flash,flash,32+flash);
+
+  randomSeed((int)(t/3));
+  random(1); // Draw one random value. If we don't do this, then the first value generated is not very random
+  float x1 = random(-400, 400);
+  float x2 = random(-400, 400);
+  float x3 = random(-400, 400);
+
+  randomSeed((int)(t*5));
+  subdivide_bolt(x1,-600,-2000, x1, 800, -2000, 4, random(0.25, 0.75), brightness1);
+  subdivide_bolt(x2,-600,-1000, x2, 800, -1000, 4, random(0.25, 0.75), brightness2);
+  subdivide_bolt(x3,-600,-2000, x3, 800, -2000, 4, random(0.25, 0.75), brightness3);
+  
   translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
   
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
@@ -121,23 +142,6 @@ void draw() {
     popMatrix();
   }
 
-  // Draw lightning bolt
-  
-  float b = floatmod(t,3);
-  float brightness1 = min(gaussian(1.5, 0.1, b), 1);
-  float brightness2 = min(gaussian(2.5, 0.1, b), 1);
-  float brightness3 = min(gaussian(1.0, 0.1, b), 1);
-
-  randomSeed((int)(t/3));
-  random(1); // If we don't do this, then the first value generated is not very random
-  float x1 = random(-400, 400);
-  float x2 = random(-400, 400);
-  float x3 = random(-400, 400);
-
-  randomSeed((int)(t*5));
-  subdivide_bolt(x1,-600,-2000, x1, 200, -2000, 4, random(0.25, 0.75), brightness1);
-  subdivide_bolt(x2,-600,-1000, x2, 200, -1000, 4, random(0.25, 0.75), brightness2);
-  subdivide_bolt(x3,-600,-2000, x3, 200, -2000, 4, random(0.25, 0.75), brightness3);
   
   
   //float x = keski.x;
@@ -152,7 +156,7 @@ void draw() {
   //draw_bolt(x,y,z, 0, 100, -1000);
   //draw_bolt(0,-100,-500, 0, 100, -500);
   
-  //saveFrame("frames/####.tif");
+  saveFrame("frames/####.tif");
 }
 
 
