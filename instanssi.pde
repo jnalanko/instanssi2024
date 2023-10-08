@@ -1,4 +1,4 @@
-final int COUNT = 300;
+final int COUNT = 600;
 final float PULSE_TIME = 2;
 
 Arc arcs[];
@@ -92,7 +92,7 @@ float gaussian(float mu, float sigma, float x){
 void draw() {
 
   float t = millis() / 1000.0; // Current time in seconds
-  
+  println(t);
 
   // Draw lightning bolt
   
@@ -114,7 +114,8 @@ void draw() {
   subdivide_bolt(x2,-600,-1000, x2, 800, -1000, 4, random(0.25, 0.75), brightness2);
   subdivide_bolt(x3,-600,-2000, x3, 800, -2000, 4, random(0.25, 0.75), brightness3);
   
-  translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
+  //translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
+  translate(width/2, height/2, 500 + 100*t); // Zoom forward 100 units / second
   
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
   int PULSE_WIDTH = 30;
@@ -138,25 +139,16 @@ void draw() {
 
     // increase z rotation angle
     arcs[i].zrot += arcs[i].speed / 50;
+    
+    // Decrease speed
+    if(t > 5 && t < 10) arcs[i].speed *= 0.97;
+    if(t > 10 && t < 15) arcs[i].speed += random(0.005, 0.015);
+    if(t > 15) arcs[i].speed -= random(0.005, 0.015);
 
     popMatrix();
   }
-
   
-  
-  //float x = keski.x;
-  //float y = keski.y;
-  //float z = keski.z;
-  //beginShape(LINES);
-  //vertex(0,-100,-1000);
-  //vertex(x,y,z);
-  //vertex(0, 100, -1000);
-  //endShape();
-  //draw_bolt(0,-100,-1000, x,y,z);
-  //draw_bolt(x,y,z, 0, 100, -1000);
-  //draw_bolt(0,-100,-500, 0, 100, -500);
-  
-  saveFrame("frames/####.tif");
+  //saveFrame("frames/####.tif");
 }
 
 
