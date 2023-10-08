@@ -5,6 +5,7 @@ Arc arcs[];
 
 class Arc{
    float xrot, yrot, zrot;
+   float z;
    float degrees;
    float radius;
    float width;
@@ -27,6 +28,7 @@ void setup() {
     arcs[i].xrot = 0;
     arcs[i].yrot = 0;
     arcs[i].zrot = random(TAU);
+    arcs[i].z = 5*i;
 
     arcs[i].degrees =  45 + random(45); // length in degrees
     arcs[i].radius = 90 + random(20);
@@ -105,6 +107,7 @@ void draw() {
   float brightness2 = min(gaussian(2.5, 0.1, b), 1);
   float brightness3 = min(gaussian(1.0, 0.1, b), 1);
   float flash = min(64, (brightness1 + brightness2 + brightness3) * 32);
+  //flash = 0;
   background(flash,flash,32+flash);
 
   randomSeed((int)(t/3));
@@ -119,7 +122,8 @@ void draw() {
   subdivide_bolt(x3,-600,-2000, x3, 800, -2000, 4, random(0.25, 0.75), brightness3);
   
   //translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
-  translate(width/2, height/2, 500 + 100*t); // Zoom forward 100 units / second
+  float cameraZ = 500 + 100*t;
+  translate(width/2, height/2, cameraZ); // Zoom forward
   
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
   int PULSE_WIDTH = 30;
@@ -128,14 +132,16 @@ void draw() {
     // Drawing arc i
     
     pushMatrix();
-    translate(0,0, -i * 5);
+    translate(0,0,-arcs[i].z);
     rotateZ(arcs[i].zrot);
     
     color rgba = arcs[i].rgba;
+    float fog = 1 - constrain((arcs[i].z - cameraZ) / 500, 0, 1);    
     if (abs(i - pulse_index) <= (PULSE_WIDTH/2)){
       float d = 1 - (float)abs(i - pulse_index) / (PULSE_WIDTH / 2);
       rgba = colorBlended(d, red(rgba), green(rgba), blue(rgba), 255, 255, 255, 255);
     }
+    rgba = color(red(rgba) + flash, green(rgba) + flash, blue(rgba) + flash,alpha(rgba)*fog + flash * 0.5);
     fill(rgba);
     noStroke();
     
