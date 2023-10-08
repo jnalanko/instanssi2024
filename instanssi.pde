@@ -9,6 +9,7 @@ class Arc{
    float radius;
    float width;
    float speed;
+   float acceleration;
    color rgba;
 }
 
@@ -33,6 +34,9 @@ void setup() {
     
     arcs[i].speed = random(4)-2;
     if(random(100) > 90) arcs[i].speed += 5;
+    
+    arcs[i].acceleration = random(0.01);
+    if(random(100) > 90) arcs[i].acceleration += 0.02;
     
     arcs[i].rgba = colorBlended(random(1), 200,255,0, 50,120,0, 210);
   }
@@ -142,8 +146,8 @@ void draw() {
     
     // Decrease speed
     if(t > 5 && t < 10) arcs[i].speed *= 0.97;
-    if(t > 10 && t < 15) arcs[i].speed += random(0.005, 0.015);
-    if(t > 15) arcs[i].speed -= random(0.005, 0.015);
+    if(t > 10 && t < 15) arcs[i].speed += arcs[i].acceleration;
+    if(t > 15) arcs[i].speed -= arcs[i].acceleration;
 
     popMatrix();
   }
