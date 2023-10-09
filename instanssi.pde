@@ -28,7 +28,7 @@ void setup() {
     arcs[i].xrot = 0;
     arcs[i].yrot = 0;
     arcs[i].zrot = random(TAU);
-    arcs[i].z = 5*i;
+    arcs[i].z = -5*i;
 
     arcs[i].degrees =  45 + random(45); // length in degrees
     arcs[i].radius = 90 + random(20);
@@ -103,6 +103,12 @@ void draw() {
   float t = millis() / 1000.0; // Current time in seconds
   float dt = t - prev_t;
 
+  float cameraZ = -100*t;
+
+  camera(width/2.0, height/2.0, cameraZ, // Camera position 
+         width/2.0, height/2.0, cameraZ- 1, // Look at this point (down the negative z-axis)
+         0, 1, 0); // The positive y-axis is the up-direction
+
   // Draw lightning bolt
   
   float b = floatmod(t,3);
@@ -125,8 +131,7 @@ void draw() {
   subdivide_bolt(x3,-600,-2000, x3, 800, -2000, 4, random(0.25, 0.75), brightness3);
   
   //translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
-  float cameraZ = 500 + 100*t;
-  translate(width/2, height/2, cameraZ); // Zoom forward
+  //translate(width/2, height/2, cameraZ); // Zoom forward
   
   int pulse_index = COUNT - (int)(floatmod(t, PULSE_TIME) / PULSE_TIME * COUNT);
   int PULSE_WIDTH = 30;
@@ -135,11 +140,11 @@ void draw() {
     // Drawing arc i
     
     pushMatrix();
-    translate(0,0,-arcs[i].z);
+    translate(width/2.0, height/2.0, arcs[i].z); // Center of the coordinate system of the arc
     rotateZ(arcs[i].zrot);
     
     color rgba = arcs[i].rgba;
-    float fog = 1 - constrain((arcs[i].z - cameraZ) / 500, 0, 1);    
+    float fog = 1 - constrain((arcs[i].z - cameraZ) / 1000, 0, 1);  
     if (abs(i - pulse_index) <= (PULSE_WIDTH/2)){
       float d = 1 - (float)abs(i - pulse_index) / (PULSE_WIDTH / 2);
       rgba = colorBlended(d, red(rgba), green(rgba), blue(rgba), 255, 255, 255, 255);
@@ -157,13 +162,15 @@ void draw() {
     if(t > 5 && t < 10) arcs[i].speed *= pow(0.3, dt);
     if(t > 10 && t < 15) arcs[i].speed += arcs[i].acceleration * dt;
     if(t > 15) arcs[i].speed -= arcs[i].acceleration * dt;
+    
+    //arcs[i].degrees += dt*2;
 
     popMatrix();
   }
   
   prev_t = t;
   
-  saveFrame("frames/####.tif");
+  //saveFrame("frames/####.tif");
 }
 
 
@@ -183,9 +190,9 @@ void arc(float x, float y, float degrees, float radius, float w) {
   for (int i = 0; i < degrees; i++) {
     float angle = radians(i);
     vertex(x + cos(angle) * radius,
-           y + sin(angle) * radius);
+           y + sin(angle) * radius, 0);
     vertex(x + cos(angle) * (radius+w),
-           y + sin(angle) * (radius+w));
+           y + sin(angle) * (radius+w), 0);
   }
   endShape();
 }
