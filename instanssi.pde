@@ -126,9 +126,9 @@ void draw() {
   float x3 = random(-400, 1600);
 
   randomSeed((int)(t*5));
-  subdivide_bolt(x1,-600,-2000, x1, 800, -2000, 4, random(0.25, 0.75), brightness1);
-  subdivide_bolt(x2,-600,-1000, x2, 800, -1000, 4, random(0.25, 0.75), brightness2);
-  subdivide_bolt(x3,-600,-2000, x3, 800, -2000, 4, random(0.25, 0.75), brightness3);
+  subdivide_bolt(x1,-600,-4000, x1, 800, -4000, 4, random(0.25, 0.75), brightness1);
+  subdivide_bolt(x2,-600,-4000, x2, 800, -4000, 4, random(0.25, 0.75), brightness2);
+  subdivide_bolt(x3,-600,-4000, x3, 800, -4000, 4, random(0.25, 0.75), brightness3);
   
   //translate(width/2 + sin(t) * 20, height/2 + cos(t * 1.2) * 10, 500 + 100*t); // Zoom forward 100 units / second
   //translate(width/2, height/2, cameraZ); // Zoom forward
