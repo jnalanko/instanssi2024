@@ -148,6 +148,7 @@ void draw() {
     if (abs(i - pulse_index) <= (PULSE_WIDTH/2)){
       float d = 1 - (float)abs(i - pulse_index) / (PULSE_WIDTH / 2);
       rgba = colorBlended(d, red(rgba), green(rgba), blue(rgba), 255, 255, 255, 255);
+      fog = 0.8;
     }
     float highlight = pow(flash, 1);
     println(highlight);
