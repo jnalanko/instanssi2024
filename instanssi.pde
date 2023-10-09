@@ -41,7 +41,7 @@ void setup() {
     if(random(100) > 90) arcs[i].acceleration += 0.02;
     arcs[i].acceleration *= 60;
     
-    arcs[i].rgba = colorBlended(random(1), 200,255,0, 50,120,0, 210);
+    arcs[i].rgba = colorBlended(random(1), 200,255,0, 50,120,0, 256);
   }
 }
 
@@ -115,7 +115,7 @@ void draw() {
   float brightness1 = min(gaussian(1.5, 0.1, b), 1);
   float brightness2 = min(gaussian(2.5, 0.1, b), 1);
   float brightness3 = min(gaussian(1.0, 0.1, b), 1);
-  float flash = min(64, (brightness1 + brightness2 + brightness3) * 32);
+  float flash = min(64, (brightness1 + brightness2 + brightness3) * 16);
   //flash = 0;
   background(flash,flash,32 + flash);
 
@@ -144,12 +144,14 @@ void draw() {
     rotateZ(arcs[i].zrot);
     
     color rgba = arcs[i].rgba;
-    float fog = 1 - constrain((arcs[i].z - cameraZ) / 1000, 0, 1);  
+    float fog = 1 - constrain(abs(arcs[i].z - cameraZ) / 2000, 0, 1);  
     if (abs(i - pulse_index) <= (PULSE_WIDTH/2)){
       float d = 1 - (float)abs(i - pulse_index) / (PULSE_WIDTH / 2);
       rgba = colorBlended(d, red(rgba), green(rgba), blue(rgba), 255, 255, 255, 255);
     }
-    rgba = color(red(rgba) + flash, green(rgba) + flash, blue(rgba) + flash,alpha(rgba)*fog + flash * 0.5);
+    float highlight = pow(flash, 1);
+    println(highlight);
+    rgba = color(red(rgba) + highlight, green(rgba) + highlight, blue(rgba) + highlight, alpha(rgba)*fog);
     fill(rgba);
     noStroke();
     
