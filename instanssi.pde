@@ -39,6 +39,7 @@ void setup() {
     
     arcs[i].acceleration = random(0.01);
     if(random(100) > 90) arcs[i].acceleration += 0.02;
+    arcs[i].acceleration *= 60;
     
     arcs[i].rgba = colorBlended(random(1), 200,255,0, 50,120,0, 210);
   }
@@ -95,10 +96,12 @@ float gaussian(float mu, float sigma, float x){
 
 // Idea: kaaret lähtee menemään samaan suuntaan ja kiihtyy
 
+float prev_t = 0;
+
 void draw() {
 
   float t = millis() / 1000.0; // Current time in seconds
-  println(t);
+  float dt = t - prev_t;
 
   // Draw lightning bolt
   
@@ -108,13 +111,13 @@ void draw() {
   float brightness3 = min(gaussian(1.0, 0.1, b), 1);
   float flash = min(64, (brightness1 + brightness2 + brightness3) * 32);
   //flash = 0;
-  background(flash,flash,flash);
+  background(flash,flash,32 + flash);
 
   randomSeed((int)(t/3));
   random(1); // Draw one random value. If we don't do this, then the first value generated is not very random
-  float x1 = random(-400, 400);
-  float x2 = random(-400, 400);
-  float x3 = random(-400, 400);
+  float x1 = random(-400, 1600);
+  float x2 = random(-400, 1600);
+  float x3 = random(-400, 1600);
 
   randomSeed((int)(t*5));
   subdivide_bolt(x1,-600,-2000, x1, 800, -2000, 4, random(0.25, 0.75), brightness1);
@@ -148,17 +151,19 @@ void draw() {
     arc(0, 0, arcs[i].degrees, arcs[i].radius, arcs[i].width);
 
     // increase z rotation angle
-    arcs[i].zrot += arcs[i].speed / 50;
+    arcs[i].zrot += arcs[i].speed * dt;
     
     // Decrease speed
-    if(t > 5 && t < 10) arcs[i].speed *= 0.97;
-    if(t > 10 && t < 15) arcs[i].speed += arcs[i].acceleration;
-    if(t > 15) arcs[i].speed -= arcs[i].acceleration;
+    if(t > 5 && t < 10) arcs[i].speed *= pow(0.3, dt);
+    if(t > 10 && t < 15) arcs[i].speed += arcs[i].acceleration * dt;
+    if(t > 15) arcs[i].speed -= arcs[i].acceleration * dt;
 
     popMatrix();
   }
   
-  //saveFrame("frames/####.tif");
+  prev_t = t;
+  
+  saveFrame("frames/####.tif");
 }
 
 
